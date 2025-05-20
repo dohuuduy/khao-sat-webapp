@@ -109,47 +109,47 @@
             </tr>
             <tr>
                 <td colspan="2"><strong>Họ và tên chủ hộ</strong></td>
-                <td colspan="2" id="hoTen"></td>
+                <td colspan="2">[hoTen]</td>
             </tr>
             <tr>
                 <td><strong>Vị trí công việc</strong></td>
-                <td id="viTri"></td>
+                <td>[viTri]</td>
                 <td><strong>Số thành viên trong gia đình</strong></td>
-                <td id="tongThanhVien"></td>
+                <td>[tongThanhVien]</td>
             </tr>
             <tr>
                 <td><strong>Người lớn</strong></td>
-                <td id="nguoiLon"></td>
+                <td>[nguoiLon]</td>
                 <td><strong>Trẻ em</strong></td>
-                <td id="treEm"></td>
+                <td>[treEm]</td>
             </tr>
             <tr>
                 <td><strong>Địa chỉ</strong></td>
-                <td colspan="3" id="diaChi"></td>
+                <td colspan="3">[diaChi]</td>
             </tr>
             <tr>
                 <td><strong>Năm</strong></td>
-                <td id="nam"></td>
+                <td>[nam]</td>
                 <td><strong>Điện thoại</strong></td>
-                <td id="dienThoai"></td>
+                <td>[dienThoai]</td>
             </tr>
             <tr>
                 <td><strong>Email</strong></td>
-                <td id="email"></td>
+                <td>[email]</td>
                 <td><strong>Giới tính</strong></td>
-                <td id="gioiTinh"></td>
+                <td>[gioiTinh]</td>
             </tr>
             <tr>
                 <td><strong>Ngày sinh</strong></td>
-                <td id="ngaySinh"></td>
+                <td>[ngaySinh]</td>
                 <td><strong>CMND/CCCD</strong></td>
-                <td id="cmnd"></td>
+                <td>[cmnd]</td>
             </tr>
             <tr>
                 <td><strong>Phòng ban</strong></td>
-                <td id="phongBan"></td>
+                <td>[phongBan]</td>
                 <td><strong>Chức vụ</strong></td>
-                <td id="chucVu"></td>
+                <td>[chucVu]</td>
             </tr>
         </table>
         <!-- 1. Nhà ở -->
@@ -512,6 +512,12 @@
             document.getElementById('dataWarning').textContent = 'Cảnh báo: Các trường sau không khớp với mẫu báo cáo và sẽ không hiển thị: ' + missing.join(', ');
         }
     }
+    function replacePlaceholders(data) {
+        // Thay thế tất cả [field] trong body.innerHTML bằng giá trị tương ứng
+        document.body.innerHTML = document.body.innerHTML.replace(/\[([a-zA-Z0-9_]+)\]/g, function(match, field) {
+            return (data[field] !== undefined && data[field] !== null) ? data[field] : '';
+        });
+    }
     document.addEventListener('DOMContentLoaded', function() {
         const data = getData();
         if (Object.keys(data).length === 0) {
@@ -520,7 +526,9 @@
             return;
         }
         fillData(data);
+        replacePlaceholders(data);
         document.getElementById('printBtn').onclick = function() {
+            replacePlaceholders(data); // Đảm bảo thay thế trước khi in
             window.print();
         };
     });
