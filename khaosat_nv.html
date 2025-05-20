@@ -512,16 +512,11 @@
             document.getElementById('dataWarning').textContent = 'Cảnh báo: Các trường sau không khớp với mẫu báo cáo và sẽ không hiển thị: ' + missing.join(', ');
         }
     }
-    function replacePlaceholdersInDOM(node, data) {
-        if (node.nodeType === 3) { // Text node
-            node.nodeValue = node.nodeValue.replace(/\[([a-zA-Z0-9_]+)\]/g, function(match, field) {
-                return (data[field] !== undefined && data[field] !== null) ? data[field] : '';
-            });
-        } else if (node.nodeType === 1 && node.childNodes) { // Element node
-            for (let i = 0; i < node.childNodes.length; i++) {
-                replacePlaceholdersInDOM(node.childNodes[i], data);
-            }
-        }
+    function replacePlaceholdersInContainer(data) {
+        var container = document.querySelector('.container');
+        container.innerHTML = container.innerHTML.replace(/\[([a-zA-Z0-9_]+)\]/g, function(match, field) {
+            return (data[field] !== undefined && data[field] !== null) ? data[field] : '';
+        });
     }
     document.addEventListener('DOMContentLoaded', function() {
         const data = getData();
@@ -531,9 +526,9 @@
             return;
         }
         fillData(data);
-        replacePlaceholdersInDOM(document.body, data);
+        replacePlaceholdersInContainer(data);
         document.getElementById('printBtn').onclick = function() {
-            replacePlaceholdersInDOM(document.body, data); // Đảm bảo thay thế trước khi in
+            replacePlaceholdersInContainer(data);
             window.print();
         };
     });
