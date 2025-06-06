@@ -80,52 +80,26 @@ function doPost(e) {
 
 // Xử lý preflight request (OPTIONS)
 function doOptions(e) {
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Max-Age': '86400'
-  };
-  
-  return ContentService.createTextOutput(JSON.stringify({}))
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders(headers);
+  return ContentService.createTextOutput("")
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 // Hàm lấy dữ liệu cho dashboard
-function doGet(e) {
+function doGet() {
   try {
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('DT_KHAO_SAT');
     const data = sheet.getDataRange().getValues();
     
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Max-Age': '86400'
-    };
-    
     return ContentService.createTextOutput(JSON.stringify({
       status: 'success',
       data: data
-    }))
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders(headers);
+    })).setMimeType(ContentService.MimeType.JSON);
 
   } catch (error) {
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Max-Age': '86400'
-    };
-    
     return ContentService.createTextOutput(JSON.stringify({
       status: 'error',
       message: error.toString()
-    }))
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders(headers);
+    })).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
@@ -201,32 +175,19 @@ function doPost(e) {
     const data = JSON.parse(e.postData.contents);
     
     if (data.action === 'deleteRow') {
-      const result = deleteRowFromSheet(data.rowIndex);
-      return ContentService.createTextOutput(JSON.stringify(result))
-        .setMimeType(ContentService.MimeType.JSON)
-        .setHeader('Access-Control-Allow-Origin', '*')
-        .setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-        .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      return deleteRowFromSheet(data.rowIndex);
     }
     
     return ContentService.createTextOutput(JSON.stringify({
       status: 'error',
       message: 'Invalid action'
-    }))
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeader('Access-Control-Allow-Origin', '*')
-    .setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-    .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    })).setMimeType(ContentService.MimeType.JSON);
     
   } catch (error) {
     return ContentService.createTextOutput(JSON.stringify({
       status: 'error',
       message: error.toString()
-    }))
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeader('Access-Control-Allow-Origin', '*')
-    .setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-    .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    })).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
@@ -235,21 +196,21 @@ function deleteRowFromSheet(rowIndex) {
   try {
     // Lấy spreadsheet và sheet
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName('DT_KHAO_SAT'); // Thêm tên sheet cụ thể
+    const sheet = ss.getActiveSheet();
     
     // Xóa dòng
     sheet.deleteRow(rowIndex);
     
-    return {
+    return ContentService.createTextOutput(JSON.stringify({
       status: 'success',
       message: 'Row deleted successfully'
-    };
+    })).setMimeType(ContentService.MimeType.JSON);
     
   } catch (error) {
-    return {
+    return ContentService.createTextOutput(JSON.stringify({
       status: 'error',
       message: error.toString()
-    };
+    })).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
@@ -257,26 +218,18 @@ function deleteRowFromSheet(rowIndex) {
 function doGet(e) {
   try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName('DT_KHAO_SAT'); // Thêm tên sheet cụ thể
+    const sheet = ss.getActiveSheet();
     const data = sheet.getDataRange().getValues();
     
     return ContentService.createTextOutput(JSON.stringify({
       status: 'success',
       data: data
-    }))
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeader('Access-Control-Allow-Origin', '*')
-    .setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-    .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    })).setMimeType(ContentService.MimeType.JSON);
     
   } catch (error) {
     return ContentService.createTextOutput(JSON.stringify({
       status: 'error',
       message: error.toString()
-    }))
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeader('Access-Control-Allow-Origin', '*')
-    .setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-    .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    })).setMimeType(ContentService.MimeType.JSON);
   }
 } 
