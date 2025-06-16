@@ -535,7 +535,7 @@
                         stt: idx + 1,
                         hoTen: row[6],
                         nam: new Date(row[1]).getFullYear(),
-                        dienThoai: row[7],
+                        dienThoai: row[7] ? String(row[7]).padStart(10, '0') : '',
                         tongChiPhi: row[29],
                         tongThuNhap: row[32],
                         raw: row
@@ -602,12 +602,8 @@
             const d = surveyData[idx];
             const r = d.raw;
             const data = {
-                id: r[0],
-                thoiGianTao: r[1],
-                thoiGianCapNhat: r[2],
-                nguoiTao: r[3],
-                nguoiCapNhat: r[4],
-                trangThai: r[5],
+                ngayKhaoSat: r[1],
+                nguoiKhaoSat:[3],
                 hoTen: r[6],
                 dienThoai: d.dienThoai,
                 viTri: r[8],
@@ -623,19 +619,24 @@
                 rauCu: r[18],
                 sua: r[19],
                 giaVi: r[20],
+                nam: d.nam,
+                email: r[10],
+                gioiTinh: r[11],
+                ngaySinh: r[15],
                 hocPhi: r[21],
                 sachVo: r[22],
                 dongPhuc: r[23],
                 khacGiaoDuc: r[24],
                 dien: r[25],
                 nuoc: r[26],
-                internet: r[27],
-                rac: r[28],
+                internet: r[27],               
+                xangXe: r[28],
                 tongChiPhi: r[29],
                 thuNhapChinh: r[30],
                 thuNhapPhu: r[31],
                 tongThuNhap: r[32],
-                ghiChu: r[33]
+
+
             };
             window.open('temp_khaosat_nv.html?data=' + encodeURIComponent(JSON.stringify(data)), '_blank');
         }
